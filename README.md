@@ -1,10 +1,10 @@
-# studyplannerapp
+# StudyPlanner
 
-A new Flutter project.
+Your personal study planner and attendance tracker. A Flutter application designed to help students manage their study schedule, track attendance, and organize assignments.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+This project is a Flutter application for studying and academic management.
 
 A few resources to get you started if this is your first Flutter project:
 
