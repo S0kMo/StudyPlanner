@@ -1,0 +1,158 @@
+import 'package:flutter/material.dart';
+
+//Note: all commented code lines with "Todo: Add mock data" are intentional and should remain commented until mock data is added. jam add code freature pg, puk ah feature ng dak jol folder ui hv
+import 'components/welcomescreen.dart';
+import 'components/bottomnav.dart';
+import 'components/dashboard.dart';
+import 'components/studyplanner.dart';
+import 'components/attendancetracker.dart';
+import 'components/assignmentmanager.dart';
+import 'components/progressoverview.dart';
+import 'components/profile.dart';
+
+void main() {
+  runApp(const StudyTrackApp());
+}
+
+class StudyTrackApp extends StatelessWidget {
+  const StudyTrackApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'StudyTrack',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        scaffoldBackgroundColor: const Color(0xFFF9FAFB), // gray-50
+      ),
+      home: const AppRoot(),
+    );
+  }
+}
+
+class AppRoot extends StatefulWidget {
+  const AppRoot({super.key});
+
+  @override
+  State<AppRoot> createState() => _AppRootState();
+}
+
+class _AppRootState extends State<AppRoot> {
+  bool _isOnboarded = false;
+  // String _nickname = '';
+  String _activeTab = 'home';
+
+  // Mock data for progress tracking
+  // final int _studyHours = 15;
+  // final int _attendanceRate = 87;
+  // final int _pendingTasks = 3;
+  // final int _completedTasks = 2;
+  // final int _totalTasks = 5;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSavedData();
+  }
+
+  // Load saved data from SharedPreferences (equivalent to localStorage)
+  Future<void> _loadSavedData() async {
+    final prefs = await SharedPreferences.getInstance();
+    final savedNickname = prefs.getString('studytrack_nickname');
+    if (savedNickname != null && savedNickname.isNotEmpty) {
+      setState(() {
+        // Todo: Add mock data
+        // _nickname = savedNickname;
+        _isOnboarded = true;
+      });
+    }
+  }
+
+  Future<void> _handleOnboardingComplete(String userNickname) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('studytrack_nickname', userNickname);
+    setState(() {
+      // _nickname = userNickname;
+      _isOnboarded = true;
+    });
+  }
+
+  Future<void> _handleNicknameChange(String newNickname) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('studytrack_nickname', newNickname);
+    setState(() {
+      // _nickname = newNickname;
+    });
+  }
+
+  Future<void> _handleLogout() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('studytrack_nickname');
+    setState(() {
+      _isOnboarded = false;
+      // _nickname = '';
+      _activeTab = 'home';
+    });
+  }
+
+  Widget _buildActiveTab() {
+    switch (_activeTab) {
+      case 'home':
+        return Dashboard(
+          //Todo: Add mock data
+          // nickname: _nickname,
+          // studyHours: _studyHours,
+          // attendanceRate: _attendanceRate,
+          // pendingTasks: _pendingTasks,
+        );
+      case 'planner':
+        return const StudyPlanner();
+      case 'attendance':
+        return const AttendanceTracker();
+      case 'assignments':
+        return const AssignmentManager();
+      case 'progress':
+        return ProgressOverview(
+          //Todo: Add mock data
+          // studyHours: _studyHours,
+          // attendanceRate: _attendanceRate,
+          // completedTasks: _completedTasks,
+          // totalTasks: _totalTasks,
+        );
+      case 'profile':
+        return Profile(
+          // nickname: _nickname,
+          // onNicknameChange: _handleNicknameChange,
+          // onLogout: _handleLogout,
+        );
+      default:
+        return Dashboard(
+          // nickname: _nickname,
+          // studyHours: _studyHours,
+          // attendanceRate: _attendanceRate,
+          // pendingTasks: _pendingTasks,
+        );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (!_isOnboarded) {
+      return WelcomeScreen(
+        // onOnboardingComplete: _handleOnboardingComplete,
+      );
+    }
+
+    return Scaffold(
+      body: _buildActiveTab(),
+      bottomNavigationBar: BottomNav(
+        // activeTab: _activeTab,
+        // onTabChanged: (newTab) {
+        //     setState(() {
+        //       _activeTab = newTab;
+        //     });
+        //   },
+      ),
+    );
+  }
+}
