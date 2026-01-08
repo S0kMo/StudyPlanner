@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class WelcomeScreen extends StatefulWidget {
-  const WelcomeScreen({super.key});
+  final Function(String) onOnboardingComplete;
+
+  const WelcomeScreen({super.key, required this.onOnboardingComplete});
 
   @override
   State<WelcomeScreen> createState() => _WelcomescreenState();
@@ -113,13 +115,9 @@ class _WelcomescreenState extends State<WelcomeScreen> {
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: () {
-                        // Handle get started action
                         String nickname = _nicknameController.text;
                         if (nickname.isNotEmpty) {
-                          // TODO: Navigate to next page with nickname
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('Welcome, $nickname!')),
-                          );
+                          widget.onOnboardingComplete(nickname);
                         }
                       },
                       style: ElevatedButton.styleFrom(

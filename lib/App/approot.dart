@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 //Note: all commented code lines with "Todo: Add mock data" are intentional and should remain commented until mock data is added. jam add code freature pg, puk ah feature ng dak jol folder ui hv
 import 'components/welcomescreen.dart';
 import 'components/bottomnav.dart';
@@ -26,6 +26,7 @@ class StudyTrackApp extends StatelessWidget {
         scaffoldBackgroundColor: const Color(0xFFF9FAFB), // gray-50
       ),
       home: const AppRoot(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
@@ -39,15 +40,15 @@ class AppRoot extends StatefulWidget {
 
 class _AppRootState extends State<AppRoot> {
   bool _isOnboarded = false;
-  // String _nickname = '';
+  String _nickname = '';
   String _activeTab = 'home';
 
   // Mock data for progress tracking
-  // final int _studyHours = 15;
-  // final int _attendanceRate = 87;
-  // final int _pendingTasks = 3;
-  // final int _completedTasks = 2;
-  // final int _totalTasks = 5;
+  final int _studyHours = 15;
+  final int _attendanceRate = 87;
+  final int _pendingTasks = 3;
+  final int _completedTasks = 2;
+  final int _totalTasks = 5;
 
   @override
   void initState() {
@@ -62,7 +63,7 @@ class _AppRootState extends State<AppRoot> {
     if (savedNickname != null && savedNickname.isNotEmpty) {
       setState(() {
         // Todo: Add mock data
-        // _nickname = savedNickname;
+        _nickname = savedNickname;
         _isOnboarded = true;
       });
     }
@@ -72,7 +73,7 @@ class _AppRootState extends State<AppRoot> {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('studytrack_nickname', userNickname);
     setState(() {
-      // _nickname = userNickname;
+      _nickname = userNickname;
       _isOnboarded = true;
     });
   }
@@ -81,7 +82,7 @@ class _AppRootState extends State<AppRoot> {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('studytrack_nickname', newNickname);
     setState(() {
-      // _nickname = newNickname;
+      _nickname = newNickname;
     });
   }
 
@@ -90,7 +91,7 @@ class _AppRootState extends State<AppRoot> {
     await prefs.remove('studytrack_nickname');
     setState(() {
       _isOnboarded = false;
-      // _nickname = '';
+      _nickname = '';
       _activeTab = 'home';
     });
   }
@@ -100,10 +101,10 @@ class _AppRootState extends State<AppRoot> {
       case 'home':
         return Dashboard(
           //Todo: Add mock data
-          // nickname: _nickname,
-          // studyHours: _studyHours,
-          // attendanceRate: _attendanceRate,
-          // pendingTasks: _pendingTasks,
+          nickname: _nickname,
+          studyHours: _studyHours,
+          attendanceRate: _attendanceRate.toDouble(),
+          pendingTasks: _pendingTasks,
         );
       case 'planner':
         return const StudyPlanner();
@@ -113,24 +114,23 @@ class _AppRootState extends State<AppRoot> {
         return const AssignmentManager();
       case 'progress':
         return ProgressOverview(
-          //Todo: Add mock data
-          // studyHours: _studyHours,
-          // attendanceRate: _attendanceRate,
-          // completedTasks: _completedTasks,
-          // totalTasks: _totalTasks,
+          studyHours: _studyHours,
+          attendanceRate: _attendanceRate.toDouble(),
+          completedTasks: _completedTasks,
+          totalTasks: _totalTasks,
         );
       case 'profile':
         return Profile(
-          // nickname: _nickname,
-          // onNicknameChange: _handleNicknameChange,
-          // onLogout: _handleLogout,
+          nickname: _nickname,
+          onNicknameChange: _handleNicknameChange,
+          onLogout: _handleLogout,
         );
       default:
         return Dashboard(
-          // nickname: _nickname,
-          // studyHours: _studyHours,
-          // attendanceRate: _attendanceRate,
-          // pendingTasks: _pendingTasks,
+          nickname: _nickname,
+          studyHours: _studyHours,
+          attendanceRate: _attendanceRate.toDouble(),
+          pendingTasks: _pendingTasks,
         );
     }
   }
@@ -139,19 +139,19 @@ class _AppRootState extends State<AppRoot> {
   Widget build(BuildContext context) {
     if (!_isOnboarded) {
       return WelcomeScreen(
-        // onOnboardingComplete: _handleOnboardingComplete,
+        onOnboardingComplete: _handleOnboardingComplete,
       );
     }
 
     return Scaffold(
       body: _buildActiveTab(),
       bottomNavigationBar: BottomNav(
-        // activeTab: _activeTab,
-        // onTabChanged: (newTab) {
-        //     setState(() {
-        //       _activeTab = newTab;
-        //     });
-        //   },
+        activeTab: _activeTab,
+        onTabChanged: (newTab) {
+          setState(() {
+            _activeTab = newTab;
+          });
+        },
       ),
     );
   }
