@@ -50,6 +50,24 @@ class _AppRootState extends State<AppRoot> {
   final int _completedTasks = 2;
   final int _totalTasks = 5;
 
+    final List<Map<String, dynamic>> _subjects = [
+    {
+      'name': 'Mathematics',
+      'attended': 18,
+      'total': 20,
+    },
+    {
+      'name': 'Networking',
+      'attended': 15,
+      'total': 18,
+    },
+    {
+      'name': 'Flutter',
+      'attended': 10,
+      'total': 12,
+    },
+  ];
+
   @override
   void initState() {
     super.initState();
@@ -108,8 +126,17 @@ class _AppRootState extends State<AppRoot> {
         );
       case 'planner':
         return const StudyPlanner();
+
+
       case 'attendance':
-        return const AttendanceTracker();
+      return AttendanceTracker(
+        subjects: _subjects.map((s) => s['name'] as String).toList(),
+      );
+
+
+
+
+
       case 'assignments':
         return const AssignmentManager();
       case 'progress':
