@@ -77,18 +77,22 @@ class _Header extends StatelessWidget {
           end: Alignment.bottomRight,
         ),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(
         children: [
-          const Text(
-            'Progress Overview',
-            style: TextStyle(
-                color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            'Track your academic journey',
-            style: TextStyle(color: Colors.indigo[100], fontSize: 14),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Progress Overview',
+                style: TextStyle(
+                    color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Track your academic journey',
+                style: TextStyle(color: Colors.indigo[100], fontSize: 14),
+              ),
+            ],
           ),
         ],
       ),

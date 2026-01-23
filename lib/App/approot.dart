@@ -1,5 +1,10 @@
+import 'package:device_preview/device_preview.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:studyplannerapp/Style/apptheme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:studyplannerapp/App/services/database_service.dart';
+import 'package:studyplannerapp/App/services/mock_data_service.dart';
 //Note: all commented code lines with "Todo: Add mock data" are intentional and should remain commented until mock data is added. jam add code freature pg, puk ah feature ng dak jol folder ui hv
 import 'components/welcomescreen.dart';
 import 'components/bottomnav.dart';
@@ -10,9 +15,12 @@ import 'components/assignmentmanager.dart';
 import 'components/progressoverview.dart';
 import 'components/profile.dart';
 
-void main() {
-  runApp(const StudyTrackApp());
-}
+void main() => runApp(
+  DevicePreview(
+    enabled: !kReleaseMode,
+    builder: (context) => const StudyTrackApp(),
+  ),
+);
 
 class StudyTrackApp extends StatelessWidget {
   const StudyTrackApp({super.key});
@@ -21,10 +29,9 @@ class StudyTrackApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'StudyTrack',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        scaffoldBackgroundColor: const Color(0xFFF9FAFB), // gray-50
-      ),
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      themeMode: ThemeMode.light,
       home: const AppRoot(),
       debugShowCheckedModeBanner: false,
     );
@@ -42,6 +49,7 @@ class _AppRootState extends State<AppRoot> {
   bool _isOnboarded = false;
   String _nickname = '';
   String _activeTab = 'home';
+  late DatabaseService _databaseService;
 
   // Mock data for progress tracking
   final int _studyHours = 15;
@@ -53,7 +61,17 @@ class _AppRootState extends State<AppRoot> {
   @override
   void initState() {
     super.initState();
+    _initDatabase();
     _loadSavedData();
+  }
+
+  Future<void> _initDatabase() async {
+    _databaseService = DatabaseService();
+    await _databaseService.init();
+
+    // Seed mock data for testing
+    final mockDataService = MockDataService(_databaseService);
+    await mockDataService.seedMockData();
   }
 
   // Load saved data from SharedPreferences (equivalent to localStorage)
@@ -138,9 +156,7 @@ class _AppRootState extends State<AppRoot> {
   @override
   Widget build(BuildContext context) {
     if (!_isOnboarded) {
-      return WelcomeScreen(
-        onOnboardingComplete: _handleOnboardingComplete,
-      );
+      return WelcomeScreen(onOnboardingComplete: _handleOnboardingComplete);
     }
 
     return Scaffold(
@@ -154,5 +170,11 @@ class _AppRootState extends State<AppRoot> {
         },
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _databaseService.close();
+    super.dispose();
   }
 }

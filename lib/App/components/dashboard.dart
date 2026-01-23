@@ -102,28 +102,33 @@ class _Header extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(24, 50, 24, 32),
       decoration: const BoxDecoration(
         gradient: LinearGradient(
-          colors: [Color(0xFF4F46E5), Color(0xFF4338CA)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
+          colors: [Color(0xFFADD1E9), Color.fromARGB(255, 37, 139, 180)],
         ),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(
         children: [
-          Text(
-            currentDate,
-            style: TextStyle(color: Colors.indigo[100], fontSize: 14),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            'Hello, $nickname! 👋',
-            style: const TextStyle(
-                color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            "Let's make today productive",
-            style: TextStyle(color: Colors.indigo[100], fontSize: 14),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                currentDate,
+                style: TextStyle(color: Colors.indigo[100], fontSize: 14),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                'Hello, $nickname! 👋',
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                "Let's make today productive",
+                style: TextStyle(color: Colors.indigo[100], fontSize: 14),
+              ),
+            ],
           ),
         ],
       ),

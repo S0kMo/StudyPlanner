@@ -118,8 +118,9 @@ class _StudyPlannerState extends State<StudyPlanner>
     return Scaffold(
       backgroundColor: const Color(0xFFF9FAFB),
       appBar: AppBar(
+        actionsPadding: const EdgeInsets.only(top: 20),
         backgroundColor: Colors.white,
-        elevation: 1,
+        elevation: 0,
         title: const Text(
           'Study Planner',
           style: TextStyle(

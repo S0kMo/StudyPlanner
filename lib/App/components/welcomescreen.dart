@@ -25,6 +25,7 @@ class _WelcomescreenState extends State<WelcomeScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: [
+            Padding(padding: const EdgeInsets.only(top: 100)),
             const SizedBox(height: 60),
             // StudyTrack Icon and Title
             Container(
